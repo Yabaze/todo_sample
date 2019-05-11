@@ -2,7 +2,9 @@ package com.sample.todo.database;
 
 import android.content.Context;
 
-import com.sample.todo.database.dao.Semester;
+import com.sample.todo.database.dao.ClassDao;
+import com.sample.todo.database.dao.entity.ClassTable;
+import com.sample.todo.database.dao.entity.Semester;
 import com.sample.todo.database.dao.SemesterDao;
 
 import androidx.room.Database;
@@ -11,7 +13,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Semester.class}, version = 1)
+@Database(entities = {Semester.class, ClassTable.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -19,13 +21,15 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "todo")
+                    Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "todo.db")
                             .build();
         }
         return INSTANCE;
     }
 
     public abstract SemesterDao semesterDao();
+
+    public abstract ClassDao classDao();
 
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override

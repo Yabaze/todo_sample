@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 
 import com.sample.todo.BR;
 import com.sample.todo.R;
-import com.sample.todo.database.dao.entity.Semester;
-import com.sample.todo.databinding.RecyclerItemBinding;
+import com.sample.todo.database.dao.entity.ClassTable;
+import com.sample.todo.databinding.ClassesRecyclerViewBinding;
 import com.sample.todo.view.activity.MainActivity;
 
 import java.util.List;
@@ -15,13 +15,13 @@ import java.util.List;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
+public class ClassDetailRecyclerAdapter extends RecyclerView.Adapter<ClassDetailRecyclerAdapter.RecyclerViewHolder> {
 
-    private List<Semester> semesterList;
-    RecyclerItemBinding binding;
+    private List<ClassTable> classTableList;
+    ClassesRecyclerViewBinding binding;
 
-    public RecyclerViewAdapter(List<Semester> semesterList) {
-        this.semesterList = semesterList;
+    public ClassDetailRecyclerAdapter(List<ClassTable> classTableList) {
+        this.classTableList = classTableList;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.recycler_item, parent, false);
+                R.layout.classes_recycler_view, parent, false);
 
         return new RecyclerViewHolder(binding);
 
@@ -38,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, int position) {
 
-        Semester item = semesterList.get(position);
+        ClassTable item = classTableList.get(position);
         holder.bind(item);
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -53,25 +53,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return semesterList.size();
+        return classTableList.size();
     }
 
-    public void addItems(List<Semester> semesterList) {
-        this.semesterList = semesterList;
+    public void addItems(List<ClassTable> classTableList) {
+        this.classTableList = classTableList;
         notifyDataSetChanged();
     }
 
     static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public RecyclerItemBinding recyclerItemBinding;
+        public ClassesRecyclerViewBinding classesRecyclerViewBinding;
 
-        public RecyclerViewHolder(RecyclerItemBinding recyclerItemBinding) {
-            super(recyclerItemBinding.getRoot());
-            this.recyclerItemBinding = recyclerItemBinding;
+        public RecyclerViewHolder(ClassesRecyclerViewBinding classesRecyclerViewBinding) {
+            super(classesRecyclerViewBinding.getRoot());
+            this.classesRecyclerViewBinding = classesRecyclerViewBinding;
         }
 
         public void bind(Object obj) {
-            recyclerItemBinding.setVariable(BR.semester, obj);
-            recyclerItemBinding.executePendingBindings();
+            classesRecyclerViewBinding.setVariable(BR.classTable, obj);
+            classesRecyclerViewBinding.executePendingBindings();
         }
     }
 }

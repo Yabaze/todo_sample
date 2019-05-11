@@ -4,7 +4,8 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.sample.todo.database.AppDatabase;
-import com.sample.todo.database.dao.Semester;
+import com.sample.todo.database.dao.SemesterDao;
+import com.sample.todo.database.dao.entity.Semester;
 
 import java.util.ArrayList;
 import java.util.Collections;

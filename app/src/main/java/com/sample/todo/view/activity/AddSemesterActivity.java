@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sample.todo.R;
-import com.sample.todo.database.dao.Semester;
+import com.sample.todo.database.dao.entity.Semester;
 import com.sample.todo.view_model.SemesterViewModel;
 
 import java.util.Calendar;

@@ -1,5 +1,7 @@
-package com.sample.todo.database.dao;
+package com.sample.todo.database.dao.entity;
 
+
+import com.sample.todo.database.dao.DateConverter;
 
 import java.util.Date;
 
@@ -12,6 +14,7 @@ import androidx.room.TypeConverters;
 public class Semester {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "uid")
     public int uid;
 
     @ColumnInfo(name = "name")

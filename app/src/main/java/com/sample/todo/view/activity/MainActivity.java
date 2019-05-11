@@ -7,11 +7,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.sample.todo.R;
+import com.sample.todo.adapters.ClassDetailRecyclerAdapter;
 import com.sample.todo.adapters.RecyclerViewAdapter;
 import com.sample.todo.api_implementation.ApiAction;
 import com.sample.todo.api_implementation.common.ApiCallPresenter;
-import com.sample.todo.database.dao.Semester;
+import com.sample.todo.database.dao.entity.ClassTable;
+import com.sample.todo.database.dao.entity.Semester;
 import com.sample.todo.databinding.ActivityMainBinding;
+import com.sample.todo.responsePojo.ClassDetail;
+import com.sample.todo.responsePojo.TeacherDetail;
+import com.sample.todo.view_model.ClassViewModel;
 import com.sample.todo.view_model.SemesterViewModel;
 
 import java.util.ArrayList;
@@ -23,19 +28,23 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class MainActivity extends AppCompatActivity implements ApiAction.GET_DETAILS {
+public class MainActivity extends AppCompatActivity implements ApiAction.GET_Teacher_CLASS_DETAILS {
 
-    private SemesterViewModel viewModel;
+    ActivityMainBinding activityMainBinding;
+    private SemesterViewModel semesterViewModel;
+    private ClassViewModel classViewModel;
+
     private RecyclerViewAdapter recyclerViewAdapter;
+    private ClassDetailRecyclerAdapter classDetailRecyclerAdapter;
 
     ApiCallPresenter apiCallPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
-        ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         apiCallPresenter = new ApiCallPresenter(this,this);
         apiCallPresenter.callDetailsAPI();
@@ -49,33 +58,61 @@ public class MainActivity extends AppCompatActivity implements ApiAction.GET_DET
         });
 
         recyclerViewAdapter = new RecyclerViewAdapter(new ArrayList<>());
+        classDetailRecyclerAdapter = new ClassDetailRecyclerAdapter(new ArrayList<>());
 
-        viewModel = ViewModelProviders.of(this).get(SemesterViewModel.class);
+        semesterViewModel = ViewModelProviders.of(this).get(SemesterViewModel.class);
 
-        viewModel.getListOfSemesterData().observe(MainActivity.this, new Observer<List<Semester>>() {
+        semesterViewModel.getListOfSemesterData().observe(MainActivity.this, new Observer<List<Semester>>() {
             @Override
             public void onChanged(@Nullable List<Semester> semesterList) {
                 recyclerViewAdapter.addItems(semesterList);
             }
         });
+        classViewModel = ViewModelProviders.of(this).get(ClassViewModel.class);
+        classViewModel.getListOfClassTableData().observe(MainActivity.this, new Observer<List<ClassTable>>() {
+            @Override
+            public void onChanged(@Nullable List<ClassTable> classList) {
+                classDetailRecyclerAdapter.addItems(classList);
+            }
+        });
+
+        activityMainBinding.setClassRecyclerAdapter(classDetailRecyclerAdapter);
 
         activityMainBinding.setAdapter(recyclerViewAdapter);
+
 
     }
 
 
     public void longPressed(Semester item) {
-        viewModel.deleteItem(item);
+        semesterViewModel.deleteItem(item);
+    }
+
+    public void longPressed(ClassTable item) {
+        classViewModel.deleteItem(item);
     }
 
     @Override
-    public void onSuccessDetails(List<Semester> semesterList) {
+    public void onSuccessTeacherClassDetailDetails(TeacherDetail teacherDetail) {
         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-        viewModel.insertItem(semesterList);
+
+
+        List<ClassDetail> a = teacherDetail.getClassDetails();
+        List<ClassTable> classTableList = new ArrayList<>();
+
+        for(ClassDetail classDetail : a){
+            classTableList.add(new ClassTable(
+                    classDetail.getClassId(),
+                    classDetail.getClassName(),
+                    classDetail.getStartTime(),
+                    classDetail.getEndTime()));
+        }
+
+        classViewModel.insertItem(classTableList);
     }
 
     @Override
-    public void onFailureDetails() {
+    public void onFailureTeacherClassDetailDetails() {
         Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show();
     }
 }

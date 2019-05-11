@@ -1,5 +1,7 @@
 package com.sample.todo.database.dao;
 
+import com.sample.todo.database.dao.entity.Semester;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;

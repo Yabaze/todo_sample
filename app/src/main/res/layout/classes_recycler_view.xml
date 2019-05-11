@@ -4,12 +4,9 @@
     <data>
 
         <variable
-            name="semester"
-            type="com.sample.todo.database.dao.entity.Semester" />
+            name="classTable"
+            type="com.sample.todo.database.dao.entity.ClassTable" />
 
-        <variable
-            name="dateConverter"
-            type="com.sample.todo.database.dao.DateConverter" />
     </data>
 
     <LinearLayout
@@ -21,18 +18,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{semester.semesterName}"
+            android:text="@{Integer.toString(classTable.class_id)}"
             android:textSize="25sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{semester.startTime.toString()}" />
+            android:text="@{classTable.class_name}"
+            android:textSize="25sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{semester.endTime}" />
+            android:text="@{classTable.start_time}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{classTable.end_time}" />
 
 
     </LinearLayout>
